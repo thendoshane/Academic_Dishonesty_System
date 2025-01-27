@@ -4,85 +4,93 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Monitoring System</title>
-    <link rel="stylesheet" href="styles.css">
-
+    <!-- Firebase SDK -->
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js"></script>
+    <script type="module" src="https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js"></script>
+    <!-- Link to Firebase config and logic -->
+    <script type="module" src="/firebase/firebase.js"></script>
     <style>
-        /* styles.css */
-
         /* General Styles */
         body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f9f9f9;
-        color: #333;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            color: #333;
         }
 
         h1, h2 {
-        margin: 0;
+            margin: 0;
         }
 
         p {
-        margin: 10px 0;
+            margin: 10px 0;
         }
 
         a {
-        text-decoration: none;
-        color: #007bff;
+            text-decoration: none;
+            color: #0056b3;
         }
 
         a:hover {
-        color: #0056b3;
+            color: #007bff;
         }
 
         /* Navigation Bar */
         .navbar {
-        background-color: #004085;
-        color: white;
-        padding: 10px 20px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
+            background-color: #004085;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
         }
 
         .navbar h1 {
-        font-size: 24px;
-        }
-
-        .navbar nav a {
-        margin-left: 15px;
-        color: white;
-        font-size: 16px;
-        }
-
-        .navbar nav a:hover {
-        text-decoration: underline;
+            font-size: 24px;
         }
 
         /* Main Content */
         main {
-        padding: 20px;
-        background: white;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        margin: 20px auto;
-        width: 90%;
-        max-width: 1200px;
-        border-radius: 8px;
-        text-align: center;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin: 20px auto;
+            width: 90%;
+            max-width: 1200px;
+            border-radius: 8px;
+            text-align: center;
         }
 
-        /* Footer */
-        footer {
-        background-color: #004085;
-        color: white;
-        text-align: center;
-        padding: 10px 0;
-        position: fixed;
-        bottom: 0;
-        width: 100%;
-        font-size: 14px;
+        #sign-up {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            gap: 10px;
         }
 
+        #sign-up form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        #sign-up form input {
+            padding: 13px;
+        }
+
+        button {
+            padding: 13px;
+            background-color: #004085;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #message {
+            margin-top: 10px;
+            font-size: 14px;
+        }
     </style>
 </head>
 <body>
@@ -90,12 +98,6 @@
         <!-- Navigation Bar -->
         <nav class="navbar">
             <h1>Exam Monitoring Dashboard</h1>
-            <div class="nav-links">
-                <a href="dashboard.html">Dashboard</a>
-                <a href="lecturerview.html">Lecturer View</a>
-                <a href="index.html">Admin</a>
-                <a href="#logout">Logout</a>
-            </div>
         </nav>
 
         <!-- Sign-Up Page -->
@@ -106,61 +108,76 @@
                 <input type="email" placeholder="Email" id="signUpEmail" required>
                 <input type="password" placeholder="Password" id="signUpPassword" required>
                 <button type="submit">Sign Up</button>
-                <p>Already have an account? <a href="#sign-in">Sign In</a></p>
+                <div id="message"></div>
+                <p>Already have an account? <a href="signin.html">Sign In</a></p>
             </form>
         </section>
     </div>
 
-    <script src="script.js"></script>
+    <!-- Sign-Up Logic -->
+    <script type="module">
+        // Import Firebase modules
+        import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-auth.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.21.0/firebase-app.js";
 
-    <script>
-        // scripts.js
+        // Firebase Configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyA9d78x1She0sBMzZ4bLFDWT5njYNRa8gQ",
+            authDomain: "academic-dishonesty.firebaseapp.com",
+            projectId: "academic-dishonesty",
+            storageBucket: "academic-dishonesty.appspot.com",
+            messagingSenderId: "951390234868",
+            appId: "1:951390234868:web:97ee9943f76436ddc516a1",
+            measurementId: "G-TS6W0RGWMS"
+        };
 
-        // Simulating authentication and navigation
-        document.addEventListener("DOMContentLoaded", () => {
-        // Add event listeners to links if needed
-        const navLinks = document.querySelectorAll(".navbar nav a");
-        navLinks.forEach(link => {
-            link.addEventListener("click", (event) => {
-            // Prevent default behavior for demo
-            event.preventDefault();
-            alert(`Navigating to ${link.textContent} page!`);
-            });
-        });
 
-        // Example: Simulate sign-in functionality
-        const signInForm = document.querySelector("#signin-form");
-        if (signInForm) {
-            signInForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const email = document.querySelector("#email").value;
-            const password = document.querySelector("#password").value;
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
 
-            if (email === "lecturer@example.com" && password === "password123") {
-                alert("Sign-in successful! Redirecting to the dashboard...");
-                window.location.href = "dashboard.html";
-            } else {
-                alert("Invalid email or password. Please try again.");
+        // Sign-Up Form Handling
+        const signUpForm = document.getElementById("signUpForm");
+        const message = document.getElementById("message");
+
+        signUpForm.addEventListener("submit", async (e) => {
+            e.preventDefault();
+
+            // Get user input
+            const name = document.getElementById("signUpName").value;
+            const email = document.getElementById("signUpEmail").value;
+            const password = document.getElementById("signUpPassword").value;
+
+            try {
+                // Firebase Sign-Up
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+
+                let timer = 1000;
+                const countdown = setInterval(() => {
+                    message.textContent = `Sign-Up Successful! Redirecting in ${timer} `;
+                    timer--;
+                    message.style.color = "green";
+                    
+                    if(timer <0){
+                        clearInterval(countdown);
+                        window.location.href =  'signin.html';
+                    }
+                })
+                // Display success message
+                
+                console.log("User created:", user);
+
+                // Clear the form
+                signUpForm.reset();
+            } catch (error) {
+                // Display error message
+                message.textContent = `Error: ${error.message}`;
+                message.style.color = "red";
+                console.error("Error during sign-up:", error);
             }
-            });
-        }
-
-        // Example: Forgot password
-        const forgotPasswordForm = document.querySelector("#forgot-password-form");
-        if (forgotPasswordForm) {
-            forgotPasswordForm.addEventListener("submit", (event) => {
-            event.preventDefault();
-            const email = document.querySelector("#email").value;
-
-            if (email) {
-                alert(`A password reset link has been sent to ${email}.`);
-            } else {
-                alert("Please enter your email address.");
-            }
-            });
-        }
         });
-
     </script>
 </body>
 </html>

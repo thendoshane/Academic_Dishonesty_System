@@ -4,20 +4,143 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Exam Monitoring System</title>
-    <link rel="stylesheet" href="/css/lecturerview.css">
-    
-</head>
+    <!--<link rel="stylesheet" href="/css/lecturerview.css"/>-->
+
+    <style>
+        /* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+h1, h2 {
+    margin: 0;
+}
+
+a {
+    text-decoration: none;
+    color: #007bff;
+}
+
+a:hover {
+    color: #0056b3;
+}
+
+/* Navigation Bar */
+.navbar {
+    background-color: #004085;
+    color: white;
+    padding: 10px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar h1 {
+    font-size: 24px;
+}
+
+.navbar .nav-links a {
+    margin-left: 15px;
+    color: white;
+    font-size: 16px;
+}
+
+/* Main Content */
+main {
+    padding: 20px;
+    background: white;
+    margin: 20px auto;
+    width: 90%;
+    max-width: 800px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+/* Modal Styling */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+}
+
+.close-modal {
+    float: right;
+    cursor: pointer;
+    color: red;
+}
+
+/* Footer */
+footer {
+    background-color: #004085;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    font-size: 14px;
+}
+
+/* Assessment Item Styling */
+.assessment-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.assessment-item button {
+    margin: 5px;
+}
+
+/* Screenshot Item Styling */
+.screenshot-item {
+    border: 1px solid #ddd;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+}
+
+.screenshot-item img {
+    max-width: 100%;
+    height: auto;
+}
+
+/* Timer Styling */
+.timer {
+    font-size: 20px;
+    font-weight: bold;
+    color: red;
+}
+    </style>
+    <script src="/js/lecturerview.js"></script>
+    </head>
 <body>
     <div id="app">
         <!-- Navigation Bar -->
         <nav class="navbar">
             <h1>Exam Monitoring Dashboard</h1>
             <div class="nav-links">
-                <a href="#dashboard">Dashboard</a>
-                <a href="#assessments">Assessments</a>
-                <a href="#reports">Reports</a>
-                <a href="#trends">Trends</a>
-                <a href="#logout">Logout</a>
+                <a href="#Profile">Profile</a>
+                <a href="index.html" id="logoutButton">Logout</a>
             </div>
         </nav>
 
@@ -28,55 +151,43 @@
                 <h2>Welcome, Lecturer!</h2>
                 <p>Manage your assessments, review reports, and analyze trends here.</p>
             </section>
-
+        </main>
+        <main>
             <!-- Assessments Section -->
             <!-- Add this to your existing assessments section in index.html or lectureview.html -->
-<section id="assessments" class="page hidden">
-    <h2>Manage Assessments</h2>
-    <div class="assessment-actions">
-        <button id="create-assessment-btn">Create New Assessment</button>
-    </div>
-    <div id="assessment-list">
-        <!-- Assessments will be dynamically added here -->
-    </div>
-    <!-- Start and Stop buttons -->
-<button id="startButton" onclick="startAssessment(assessmentId)">Start Assessment</button>
-<button id="stopButton" onclick="stopAssessment()" style="display:none;">Stop Assessment</button>
+
+            <section id="assessments" class="page hidden">
+            <h2>Manage Assessments</h2>
+            <div class="assessment-actions">
+                <button id="create-assessment-btn">Create New Assessment</button>
+            </div>
+            <div id="assessment-list">
+                <!-- Assessments will be dynamically added here -->
+            </div>
+            <!-- Start and Stop buttons -->
+            <button id="startButton" onclick="startAssessment(assessmentId)">Start Assessment</button>
+            <button id="stopButton" onclick="stopAssessment()" style="display:none;">Stop Assessment</button>
 
 
 
-<!-- Add the Analyse button -->
-<button id="analyseButton">Analyse Screenshots</button>
+            <!-- Add the Analyse button -->
+            <button id="analyseButton">Analyse Screenshots</button>
 
-<script>
-    // Add event listener for the analyse button
-    document.getElementById("analyseButton").addEventListener("click", () => {
-        // Send request to backend to start the analysis
-        fetch('/analyse_screenshots', {
-            method: 'POST'
-        })
-        .then(response => response.json())
-        .then(data => {
-            alert(data.message);
-        })
-        .catch(err => console.log('Error:', err));
-    });
-</script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-</section>
-
+            <script>
+                // Add event listener for the analyse button
+                document.getElementById("analyseButton").addEventListener("click", () => {
+                    // Send request to backend to start the analysis
+                    fetch('/analyse_screenshots', {
+                        method: 'POST'
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        alert(data.message);
+                    })
+                    .catch(err => console.log('Error:', err));
+                });
+            </script>
+            </section>
 
             <!-- Create Assessment Modal -->
             <div id="create-assessment-modal" class="modal">
@@ -117,8 +228,8 @@
                     <button id="closeModal" class="btn">Cancel</button>
                 </div>
             </div>
-
-
+        </main>
+        <main>
             <!-- Reports Section -->
             <section id="reports" class="page hidden">
                 <h2>Reports</h2>
@@ -134,7 +245,8 @@
                 </div>
             </section>
 
-
+        </main>
+        <main>
             <!-- Trends Section -->
             <section id="trends" class="page hidden">
                 <h2>Trends</h2>
@@ -146,12 +258,271 @@
 
         <!-- Footer -->
         <footer>
-            <p>&copy; 2023 Exam Monitoring System. All rights reserved.</p>
+            <p>&copy; 2025 Exam Monitoring System. All rights reserved.</p>
         </footer>
     </div>
 
-    <script src="/js/lecturerview.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+    const pages = document.querySelectorAll(".page");
+    const navLinks = document.querySelectorAll(".nav-links a");
+    const createAssessmentBtn = document.getElementById("create-assessment-btn");
+    const modal = document.getElementById("create-assessment-modal");
+    const closeModal = document.querySelector(".close-modal");
+    const assessmentForm = document.getElementById("assessment-form");
+    const assessmentList = document.getElementById("assessment-list");
     
+    let assessments = [];
+    
+    // Navigation
+    navLinks.forEach(link => {
+        link.addEventListener("click", (e) => {
+            e.preventDefault();
+            const target = link.getAttribute("href").substring(1);
+            pages.forEach(page => page.classList.remove("active"));
+            document.getElementById(target).classList.add("active");
+        });
+    });
 
+    // Show Create Assessment Modal
+    createAssessmentBtn.addEventListener("click", () => {
+        modal.classList.remove("hidden");
+        modal.style.display = 'flex'; // Ensure modal is shown as a flex container
+    });
+
+    // Close Modal
+    closeModal.addEventListener("click", () => {
+        modal.style.display = 'none';
+    });
+
+    // Create Assessment
+    assessmentForm.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const name = document.getElementById("assessment-name").value;
+        const date = document.getElementById("assessment-date").value;
+        const time = document.getElementById("assessment-time").value;
+        const duration = document.getElementById("assessment-duration").value;
+
+        const assessment = {
+            id: Date.now(),
+            name,
+            date,
+            time,
+            duration,
+            status: "Scheduled",
+            timer: duration * 60,  // Convert minutes to seconds
+            dishonestyReport: false,
+            countdownInterval: null
+        };
+
+        assessments.push(assessment);
+        renderAssessments();
+        modal.style.display = 'none'; // Close modal after form submission
+        assessmentForm.reset();
+    });
+
+    // Render Assessments
+function renderAssessments() {
+assessmentList.innerHTML = assessments.map(assessment => `
+    <div class="assessment-item">
+        <h3>${assessment.name}</h3>
+        <p>Date: ${assessment.date} | Time: ${assessment.time} | Duration: ${assessment.duration} mins</p>
+        ${assessment.status === "Scheduled" ? `
+            <button onclick="startAssessment(${assessment.id})">Start Assessment</button>` : ''}
+        ${assessment.status === "In Progress" ? `
+            <button onclick="stopAssessment(${assessment.id})">Stop Assessment</button>` : ''}
+        <button onclick="deleteAssessment(${assessment.id})">Delete</button>
+        <button onclick="manageAssessment(${assessment.id})">Manage</button>
+        ${assessment.timer > 0 ? `<p class="timer" id="timer-${assessment.id}">Time left: ${assessment.timer} seconds</p>` : ''}
+    </div>
+`).join("");
+}
+
+// Start Assessment
+
+
+// Start Assessment
+window.startAssessment = (id) => {
+const assessment = assessments.find(a => a.id === id);
+if (assessment && assessment.timer > 0) {
+    alert(`Starting assessment: ${assessment.name}`);
+    assessment.status = "In Progress";
+    renderAssessments();
+
+    // Send request to backend to start the screenshot process
+    fetch('/start_assessment', {
+        method: 'POST'
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Assessment started.') {
+            // Show stop button, hide start button
+            document.getElementById("startButton").style.display = "none";
+            document.getElementById("stopButton").style.display = "inline-block";
+        } else {
+            console.error('Error starting assessment:', data.message);
+        }
+    })
+    .catch(err => console.log('Error:', err));
+
+    startTimer(id);  // Start the timer for the assessment
+}
+};
+
+// Stop Assessment
+window.stopAssessment = () => {
+fetch('/stop_assessment', { method: 'POST' })
+    .then(response => response.json())
+    .then(data => {
+        if (data.message === 'Assessment stopped.') {
+            // Hide stop button and show start button again
+            document.getElementById("startButton").style.display = "inline-block";
+            document.getElementById("stopButton").style.display = "none";
+            alert("Assessment stopped and screenshots capturing stopped.");
+        } else {
+            alert('Error stopping assessment');
+        }
+    })
+    .catch(err => console.log('Error:', err));
+};
+
+
+
+
+////////////////////////
+
+
+
+
+
+
+
+
+
+
+/*/ Start Assessment function
+function startAssessment() {
+        fetch('/start_assessment', {
+            method: 'POST',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);  // Show success message in console
+            // Hide the start button and show stop button
+            document.getElementById('start-assessment-btn').style.display = 'none';
+            document.getElementById('stop-assessment-btn').style.display = 'block';
+        })
+        .catch(error => console.error('Error:', error));
+    }
+
+    // Stop Assessment function
+    function stopAssessment() {
+        fetch('/stop_assessment', {
+            method: 'POST',
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data.message);  // Show success message in console
+            // Hide the stop button and show start button
+            document.getElementById('stop-assessment-btn').style.display = 'none';
+            document.getElementById('start-assessment-btn').style.display = 'block';
+        })
+        .catch(error => console.error('Error:', error));
+    }
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // Timer Countdown
+    function startTimer(id) {
+        const assessment = assessments.find(a => a.id === id);
+        const timerElement = document.getElementById(`timer-${id}`);
+        if (assessment && timerElement) {
+            assessment.countdownInterval = setInterval(() => {
+                if (assessment.timer > 0) {
+                    assessment.timer--;
+                    timerElement.textContent = `Time left: ${assessment.timer} seconds`;
+                } else {
+                    clearInterval(assessment.countdownInterval);
+                    assessment.status = "Completed";
+                    renderAssessments();
+                }
+            }, 1000);
+        }
+    }
+
+    // Stop Assessment
+    window.stopAssessment = (id) => {
+        const assessment = assessments.find(a => a.id === id);
+        if (assessment) {
+            clearInterval(assessment.countdownInterval);
+            assessment.status = "Stopped";
+            assessment.timer = 0;  // Stop the timer
+            renderAssessments();
+            alert(`Assessment stopped: ${assessment.name}`);
+        }
+    };
+
+    // Delete Assessment
+    window.deleteAssessment = (id) => {
+        assessments = assessments.filter(a => a.id !== id);
+        renderAssessments();
+    };
+
+    // Manage Assessment
+    window.manageAssessment = (id) => {
+        const assessment = assessments.find(a => a.id === id);
+        if (assessment) {
+            // Pre-fill the form fields with the current assessment data
+            document.getElementById('assessmentName').value = assessment.name;
+            document.getElementById('assessmentDate').value = assessment.date;
+            document.getElementById('assessmentTime').value = assessment.time;
+            document.getElementById('assessmentDuration').value = assessment.duration;
+
+            // Show the modal
+            document.getElementById('editModal').style.display = "block";
+
+            // Save changes when "Save Changes" button is clicked
+            document.getElementById('saveChanges').onclick = () => {
+                const newName = document.getElementById('assessmentName').value;
+                const newDate = document.getElementById('assessmentDate').value;
+                const newTime = document.getElementById('assessmentTime').value;
+                const newDuration = document.getElementById('assessmentDuration').value;
+
+                if (newName && newDate && newTime && newDuration) {
+                    assessment.name = newName;
+                    assessment.date = newDate;
+                    assessment.time = newTime;
+                    assessment.duration = newDuration;
+                    renderAssessments();
+                    document.getElementById('editModal').style.display = "none";
+                }
+            };
+
+            // Close modal when "Cancel" button is clicked
+            document.getElementById('closeModal').onclick = () => {
+                document.getElementById('editModal').style.display = "none";
+            };
+        }
+    };
+});
+    </script>
 </body>
 </html>
