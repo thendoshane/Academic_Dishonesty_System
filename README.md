@@ -1,4 +1,8 @@
-Masters of Science in Computer Science
-Research system
-North West University
-Thendo Siphuma
+- Student opens their desktop and visit the assessment page
+- Once they start the assessment, the system start the screenshort process thus every 10 second a screenshort is taken
+- The screenshorts are stored on the folder related to that certain student
+- Once the exam is done, the lecturer can access the admin portal where they can start the classification process
+- The Screenshorts are analysed for any match with the rules and if they are found they are classified as dishonesty
+- if not they are classified as honest and sent to relevant folder
+- The lecture can review the students with dishonesty and give a feedback
+- Feedback is used to train the system to improe the classification process
